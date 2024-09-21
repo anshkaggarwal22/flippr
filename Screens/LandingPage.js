@@ -29,7 +29,9 @@ const LandingPage = () => {
       >
         <Text style={styles.buttonText}>sign up</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Login')}  
+      >
         <Text style={styles.loginText}>log in</Text>
       </TouchableOpacity>
     </View>
