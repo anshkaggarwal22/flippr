@@ -35,7 +35,7 @@ export default function App() {
     <NavigationContainer>
       <StatusBar style="dark" />
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="LandingPage"
         screenOptions={{
           headerShown: false,
         }}
