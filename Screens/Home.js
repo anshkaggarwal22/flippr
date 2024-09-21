@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, Text, Alert, SafeAreaView, Dimensions, PanResponder, Animated, TouchableOpacity, ImageBackground, Modal } from 'react-native';
+import { View, Image, Text, Alert, SafeAreaView, Dimensions, PanResponder, Animated, TouchableOpacity, ImageBackground, Modal, TouchableWithoutFeedback } from 'react-native';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 const SWIPE_THRESHOLD = 120; // Distance to trigger like/dislike
@@ -81,13 +80,11 @@ const Home = ({ token, navigation }) => {
   });
 
   const handleLogout = () => {
-    navigation.navigate('LandingPage')  
+    navigation.navigate('LandingPage');  
     setShowMenu(false);
   };
 
   const handleAccountSettings = () => {
-    // Navigate to account settings page
-    // This is a placeholder. You'll need to implement the navigation logic
     Alert.alert('Navigating to Account Settings');
     setShowMenu(false);
   };
@@ -135,7 +132,7 @@ const Home = ({ token, navigation }) => {
           <TouchableOpacity>
             <Image source={require('../assets/images/home_icon_pink.png')} style={styles.taskIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Alert.alert('Saved clicked!')}>
+          <TouchableOpacity onPress={() => navigation.navigate('LikedBooks', { token })}>
             <Image source={require('../assets/images/saved_icon_black.png')} style={styles.taskIcon} />
           </TouchableOpacity>
         </View>
@@ -147,16 +144,18 @@ const Home = ({ token, navigation }) => {
           visible={showMenu}
           onRequestClose={() => setShowMenu(false)}
         >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <TouchableOpacity style={styles.menuItem} onPress={handleAccountSettings}>
-                <Text style={styles.menuItemText}>Account Settings</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
-                <Text style={styles.menuItemText}>Log Out</Text>
-              </TouchableOpacity>
+          <TouchableWithoutFeedback onPress={() => setShowMenu(false)}>
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity style={styles.menuItem} onPress={handleAccountSettings}>
+                  <Text style={styles.menuItemText}>Account Settings</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
+                  <Text style={styles.menuItemText}>Log Out</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </Modal>
       </SafeAreaView>
     </ImageBackground>
@@ -236,10 +235,11 @@ const styles = {
     width: 30,
     height: 30,
   },
-  modalContainer: {
+  modalOverlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background to catch touches
   },
   modalContent: {
     backgroundColor: 'white',

@@ -9,6 +9,7 @@ import Signup from "./Screens/SignUp";
 import Login from "./Screens/Login";
 import InterestsQuestionnaire from "./Screens/InterestsQuestionnaire";
 import Home from "./Screens/Home";
+import LikedBooks from "./Screens/LikedBooks"; 
 
 const Stack = createStackNavigator();
 
@@ -35,20 +36,25 @@ export default function App() {
     <NavigationContainer>
       <StatusBar style="dark" />
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="LandingPage" 
         screenOptions={{
-          headerShown: false,
+          headerShown: false, 
         }}
       >
         <Stack.Screen name="LandingPage" component={LandingPage} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen
-          name="InterestsQuestionnaire"
-          component={InterestsQuestionnaire}
-          initialParams={{ token: "dev-test-token-123" }}
+        <Stack.Screen 
+          name="InterestsQuestionnaire" 
+          component={InterestsQuestionnaire} 
+          initialParams={{token: "dev-test-token-123"}}
         />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen 
+          name="LikedBooks" 
+          component={LikedBooks} 
+          initialParams={{token : "dev-test-token-123"}}
+        /> 
       </Stack.Navigator>
     </NavigationContainer>
   );
