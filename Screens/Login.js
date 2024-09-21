@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  Alert,
+  Animated,
 } from "react-native";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
@@ -14,24 +14,43 @@ import { useNavigation } from "@react-navigation/native";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isError, setIsError] = useState(false);
   const navigation = useNavigation();
+
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (isError) {
+      const timer = setTimeout(() => {
+        setIsError(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isError]);
+
+  const shake = () => {
+    Animated.sequence([
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 125, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: -10, duration: 125, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 125, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 0, duration: 125, useNativeDriver: true })
+    ]).start();
+  };
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
+      const res = await axios.post("http://10.250.133.148:5000/api/auth/login", {
         email: username,
         password: password,
       });
 
       if (res.data.token) {
-        Alert.alert("Login successful!", "Welcome back!");
         navigation.navigate("Home", { token: res.data.token });
       }
     } catch (err) {
-      Alert.alert(
-        "Error",
-        err.response?.data?.msg || "An error occurred during login"
-      );
+      setIsError(true);
+      shake();
     }
   };
 
@@ -49,21 +68,23 @@ const Login = () => {
 
       <Text style={styles.title}>flippr.</Text>
 
-      <TextInput
-        placeholder="username"
-        value={username}
-        onChangeText={setUsername}
-        style={styles.input}
-        placeholderTextColor="#888"
-      />
-      <TextInput
-        placeholder="password"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-        placeholderTextColor="#888"
-      />
+      <Animated.View style={{ transform: [{ translateX: shakeAnimation }] }}>
+        <TextInput
+          placeholder="username"
+          value={username}
+          onChangeText={setUsername}
+          style={[styles.input, isError && styles.inputError]}
+          placeholderTextColor="#888"
+        />
+        <TextInput
+          placeholder="password"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+          style={[styles.input, isError && styles.inputError]}
+          placeholderTextColor="#888"
+        />
+      </Animated.View>
 
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.buttonText}>log in</Text>
@@ -100,7 +121,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   input: {
-    width: "80%",
+    width: 300,
     height: 50,
     backgroundColor: "transparent",
     borderBottomWidth: 1,
@@ -110,6 +131,10 @@ const styles = StyleSheet.create({
     fontFamily: "ProximaNova-Regular",
     color: "#000",
     paddingLeft: 10,
+  },
+  inputError: {
+    borderBottomColor: "#C76D7E",
+    color: "#C76D7E"
   },
   loginButton: {
     backgroundColor: "#C76D7E",

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, Text, Alert, SafeAreaView, Dimensions, PanResponder, Animated, TouchableOpacity, ImageBackground, Modal, TouchableWithoutFeedback } from 'react-native';
 import axios from 'axios';
+import Loading from "./Loading"
 
 const { width, height } = Dimensions.get('window');
 const SWIPE_THRESHOLD = 120; // Distance to trigger like/dislike
@@ -89,7 +90,7 @@ const Home = ({ token, navigation }) => {
     setShowMenu(false);
   };
 
-  if (!book) return <Text>Loading...</Text>;
+  if (!book) return <Loading />;
 
   return (
     <ImageBackground
