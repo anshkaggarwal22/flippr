@@ -31,7 +31,26 @@ export default function App() {
   }
 
   return (
-    <Home/>
+    <NavigationContainer>
+      <StatusBar style="dark" />
+      <Stack.Navigator
+        initialRouteName="LandingPage"
+        screenOptions={{
+          headerShown: false, 
+        }}
+      >
+        <Stack.Screen name="LandingPage" component={LandingPage} />
+        
+        {/* Navigate to Sign Up */}
+        <Stack.Screen name="Signup" component={Signup} />
+        
+        {/* Navigate to Login */}
+        <Stack.Screen name="Login" component={Login} />
+        
+        {/* Navigate to Home after successful login/signup */}
+        <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -39,5 +58,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#E7EAF2',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
