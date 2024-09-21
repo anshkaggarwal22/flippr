@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LandingPage from './Screens/LandingPage';
 import Signup from './Screens/SignUp';
 import Login from './Screens/Login';
+import InterestsQuestionnaire from './Screens/InterestsQuestionnaire';
 import Home from './Screens/Home';
 
 const Stack = createStackNavigator();
@@ -34,20 +35,15 @@ export default function App() {
     <NavigationContainer>
       <StatusBar style="dark" />
       <Stack.Navigator
-        initialRouteName="LandingPage"
+        initialRouteName="InterestsQuestionnaire"
         screenOptions={{
           headerShown: false, 
         }}
       >
         <Stack.Screen name="LandingPage" component={LandingPage} />
-        
-        {/* Navigate to Sign Up */}
         <Stack.Screen name="Signup" component={Signup} />
-        
-        {/* Navigate to Login */}
         <Stack.Screen name="Login" component={Login} />
-        
-        {/* Navigate to Home after successful login/signup */}
+        <Stack.Screen name="InterestsQuestionnaire" component={InterestsQuestionnaire} />
         <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
     </NavigationContainer>

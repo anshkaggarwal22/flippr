@@ -9,18 +9,25 @@ const Signup = () => {
   const navigation = useNavigation();
 
   const handleSignUp = async () => {
+    if (!username || !password) {
+      Alert.alert('Error', 'Please provide both username and password');
+      return;
+    }
+  
     try {
       const res = await axios.post('http://localhost:5000/api/auth/signup', {
         email: username,
         password: password,
       });
-
+  
       if (res.data.token) {
         Alert.alert('Success', 'Sign-up successful!');
-        navigation.navigate('InterestsScreen', { token: res.data.token });
+        navigation.navigate('InterestsQuestionnaire', { token: res.data.token });
       }
     } catch (err) {
-      Alert.alert('Error', err.response?.data?.msg || 'An error occurred during sign-up');
+      const errorMessage = err.response?.data?.msg || 'An error occurred during sign-up';
+      Alert.alert('Error', errorMessage);
+      console.error('Sign-up error:', err);
     }
   };
 
