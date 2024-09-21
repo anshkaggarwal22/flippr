@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Image, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 
-const LikedBooks = ({ token }) => {
+const LikedBooks = ({ route }) => { 
+  const { token } = route.params;   
   const [likedBooks, setLikedBooks] = useState([]);
 
   const fetchLikedBooks = async () => {
     try {
       const res = await axios.get('http://localhost:5000/api/user/likedBooks', {
-        headers: { 'x-auth-token': token },
+        headers: { 'x-auth-token': token }, 
       });
       setLikedBooks(res.data.likedBooks);
     } catch (err) {
