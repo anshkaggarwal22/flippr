@@ -1,27 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Image, Text, Alert, SafeAreaView, Dimensions } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Image, Text, Alert, SafeAreaView, Dimensions, PanResponder, Animated, TouchableOpacity, ImageBackground, Modal } from 'react-native';
 import axios from 'axios';
-import GestureRecognizer from 'react-native-swipe-gestures';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
+const SWIPE_THRESHOLD = 120; // Distance to trigger like/dislike
 
-const Home = ({ token }) => {
+const Home = ({ token, navigation }) => {
   const [book, setBook] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const pan = useRef(new Animated.ValueXY()).current;
 
-  const analyzeInterests = async () => {
-    try {
-      const res = await axios.post('http://localhost:5000/api/ai/analyze', {
-        token: token,
-      });
-      const inferredInterests = res.data.inferredInterests;
-      Alert.alert('Inferred Interests', `Based on your likes, your interests are: ${inferredInterests}`);
-      
-      fetchBook(inferredInterests);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  
   const fetchBook = async (interests = 'the') => {
     try {
       const res = await axios.get(`https://openlibrary.org/search.json?q=${interests}`);
@@ -38,7 +27,14 @@ const Home = ({ token }) => {
     fetchBook(); 
   }, []);
 
-  const handleSwipeRight = async () => {
+  const resetPosition = () => {
+    Animated.spring(pan, {
+      toValue: { x: 0, y: 0 },
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const handleLike = async () => {
     try {
       await axios.post('http://localhost:5000/api/books/like', {
         token: token,
@@ -51,55 +47,174 @@ const Home = ({ token }) => {
     }
   };
 
-  const handleSwipeLeft = () => {
+  const handleDislike = () => {
     Alert.alert('Disliked!', `${book.title} has been skipped.`);
     fetchBook();
+  };
+
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], { useNativeDriver: false }),
+    onPanResponderRelease: (_, gestureState) => {
+      if (gestureState.dx > SWIPE_THRESHOLD) {
+        Animated.timing(pan, {
+          toValue: { x: width, y: 0 },
+          duration: 200,
+          useNativeDriver: false,
+        }).start(() => {
+          handleLike();
+          resetPosition();
+        });
+      } else if (gestureState.dx < -SWIPE_THRESHOLD) {
+        Animated.timing(pan, {
+          toValue: { x: -width, y: 0 },
+          duration: 200,
+          useNativeDriver: false,
+        }).start(() => {
+          handleDislike();
+          resetPosition();
+        });
+      } else {
+        resetPosition();
+      }
+    },
+  });
+
+  const handleLogout = () => {
+    navigation.navigate('LandingPage')  
+    setShowMenu(false);
+  };
+
+  const handleAccountSettings = () => {
+    // Navigate to account settings page
+    // This is a placeholder. You'll need to implement the navigation logic
+    Alert.alert('Navigating to Account Settings');
+    setShowMenu(false);
   };
 
   if (!book) return <Text>Loading...</Text>;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <GestureRecognizer
-        onSwipeRight={handleSwipeRight}
-        onSwipeLeft={handleSwipeLeft}
-        config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 80 }}
-        style={styles.gestureContainer}
-      >
-        <View style={styles.contentContainer}>
-          {book.coverURL ? (
-            <Image source={{ uri: book.coverURL }} style={styles.bookCover} resizeMode="contain" />
-          ) : (
-            <View style={styles.noCoverContainer}>
-              <Text>No cover available</Text>
-            </View>
-          )}
-          <Text style={styles.bookTitle}>{book.title}</Text>
-          <Text style={styles.bookAuthor}>{book.author_name ? book.author_name[0] : 'Unknown Author'}</Text>
+    <ImageBackground
+      source={{ uri: book.coverURL }}
+      style={styles.backgroundImage}
+      blurRadius={10}
+    >
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>flippr</Text>
+          <TouchableOpacity onPress={() => setShowMenu(true)}>
+            <Image source={require('../assets/images/profile_icon.png')} style={styles.profileIcon} />
+          </TouchableOpacity>
         </View>
-      </GestureRecognizer>
-    </SafeAreaView>
+
+        <View style={styles.contentContainer}>
+          <Animated.View
+            style={{
+              transform: [{ translateX: pan.x }, { translateY: pan.y }],
+            }}
+            {...panResponder.panHandlers}
+          >
+            {book.coverURL ? (
+              <Image
+                source={{ uri: book.coverURL }}
+                style={styles.bookCover}
+                resizeMode="stretch"
+              />
+            ) : (
+              <View style={styles.noCoverContainer}>
+                <Text>No cover available</Text>
+              </View>
+            )}
+          </Animated.View>
+        </View>
+
+        {/* Task Bar */}
+        <View style={styles.taskBar}>
+          <TouchableOpacity>
+            <Image source={require('../assets/images/home_icon_pink.png')} style={styles.taskIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert('Saved clicked!')}>
+            <Image source={require('../assets/images/saved_icon_black.png')} style={styles.taskIcon} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Profile Menu Modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showMenu}
+          onRequestClose={() => setShowMenu(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity style={styles.menuItem} onPress={handleAccountSettings}>
+                <Text style={styles.menuItemText}>Account Settings</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
+                <Text style={styles.menuItemText}>Log Out</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = {
+    backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(250, 250, 250, 0.5)', // Add a semi-transparent white overlay
   },
-  gestureContainer: {
-    flex: 1,
+  header: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    right: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  title: {
+    fontSize: 28,
+    fontFamily: 'ProximaNova-Bold',
+    color: '#000',
+    textShadowColor: 'rgba(0, 0, 0, 0.25)',
+    textShadowOffset: { width: 0, height: 4 },
+    textShadowRadius: 4,
+  },
+  profileIcon: {
+    width: 30,
+    height: 30,
+    alignSelf: 'center',
   },
   contentContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    marginTop: 70,
   },
   bookCover: {
-    width: width * 0.8,
-    height: height * 0.6,
+    width: width, // Slightly smaller to show background
+    height: height * 0.73,
     marginBottom: 20,
+    borderRadius: 10, // Add rounded corners
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
   noCoverContainer: {
     width: width * 0.8,
@@ -108,15 +223,38 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
+    borderRadius: 10,
   },
-  bookTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10,
+  taskBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 60,
+    backgroundColor: 'rgba(255, 255, 255, 0.0)', // Semi-transparent white background
   },
-  bookAuthor: {
+  taskIcon: {
+    width: 30,
+    height: 30,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+  },
+  menuItem: {
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  menuItemText: {
     fontSize: 18,
+    fontFamily: 'ProximaNova-bold',
     textAlign: 'center',
   },
 };
