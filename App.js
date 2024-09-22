@@ -10,6 +10,7 @@ import Login from "./Screens/Login";
 import InterestsQuestionnaire from "./Screens/InterestsQuestionnaire";
 import Home from "./Screens/Home";
 import LikedBooks from "./Screens/LikedBooks";
+import BookInfo from "./Screens/BookInfo";
 
 const Stack = createStackNavigator();
 
@@ -57,6 +58,7 @@ export default function App() {
           initialParams={{ token: "dev-test-token-123" }}
           options={{ animationEnabled: false }}
         />
+        <Stack.Screen name="BookInfo" component={BookInfo} />
       </Stack.Navigator>
     </NavigationContainer>
   );

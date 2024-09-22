@@ -123,17 +123,23 @@ const Home = ({ route, navigation }) => {
             }}
             {...panResponder.panHandlers}
           >
-            {book.coverURL ? (
-              <Image
-                source={{ uri: book.coverURL }}
-                style={styles.bookCover}
-                resizeMode="stretch"
-              />
-            ) : (
-              <View style={styles.noCoverContainer}>
-                <Text>No cover available</Text>
-              </View>
-            )}
+          <TouchableOpacity onPress={() => navigation.navigate('BookInfo', { 
+              title: book.title, 
+              author: book.author, 
+              image_url: book.coverURL 
+            })}>
+              {book.coverURL ? (
+                <Image
+                  source={{ uri: book.coverURL }}
+                  style={styles.bookCover}
+                  resizeMode="stretch"
+                />
+              ) : (
+                <View style={styles.noCoverContainer}>
+                  <Text>No cover available</Text>
+                </View>
+              )}
+            </TouchableOpacity>
           </Animated.View>
         </View>
 
