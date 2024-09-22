@@ -3,9 +3,11 @@ import { StyleSheet, Text, View, Animated, TouchableOpacity } from 'react-native
 import { useNavigation } from '@react-navigation/native';  
 
 const LandingPage = () => {
+  //animation and routing
   const bounceValue = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation();  
 
+  //animation effect
   useEffect(() => {
     Animated.spring(bounceValue, {
       toValue: 1,
@@ -15,6 +17,7 @@ const LandingPage = () => {
     }).start();
   }, []);
 
+  //logo and signup/login button that user sees when they open app
   return (
     <View style={styles.container}>
       <Animated.Text 
@@ -38,6 +41,7 @@ const LandingPage = () => {
   );
 };
 
+//styles for logo/signup/login features
 const styles = StyleSheet.create({
   container: {
     flex: 1,
