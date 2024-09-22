@@ -34,4 +34,3 @@ AI-Backed Interest Inference: AI analyses the user’s liked books to fine-tune 
 Swipe to Like/Dislike: Users can swipe to like or skip books.
 View Liked Books: Users can view all their liked books in a separate section.
 Custom Onboarding Questionnaire: Users fill out a reading preferences questionnaire during onboarding to start receiving personalized recommendations.
-Contributing
