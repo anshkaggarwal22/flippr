@@ -28,7 +28,7 @@ const Signup = () => {
 
     try {
       console.log("Making API call..."); // Debug log
-      const res = await axios.post("http://10.250.133.148:5000/api/auth/signup", {
+      const res = await axios.post("http://10.250.133.3:5000/api/auth/signup", {
         email: username,
         password: password,
       });
