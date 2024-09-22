@@ -2,11 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, Text, Alert, SafeAreaView, Dimensions, PanResponder, Animated, TouchableOpacity, ImageBackground, Modal, TouchableWithoutFeedback } from 'react-native';
 import axios from 'axios';
 import Loading from "./Loading"
+import IP from './IP';
 
 const { width, height } = Dimensions.get('window');
 const SWIPE_THRESHOLD = 120; // Distance to trigger like/dislike
 
-const Home = ({ token, navigation }) => {
+const Home = ({ route, navigation }) => {
+  const { token } = route.params;
+
   const [book, setBook] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const pan = useRef(new Animated.ValueXY()).current;
@@ -36,11 +39,12 @@ const Home = ({ token, navigation }) => {
 
   const handleLike = async () => {
     try {
-      await axios.post('http://localhost:5000/api/books/like', {
+      console.log(token)
+      await axios.post('http://' + new IP().myIP + '/api/books/like', {
         token: token,
-        book: book,   
+        book: book.coverURL,   
       });
-      Alert.alert('Liked!', `${book.title} has been added to your liked books.`);
+      Alert.alert('Liked!', `${book.coverURL} has been added to your liked books.`);
       fetchBook(); 
     } catch (err) {
       console.error(err);

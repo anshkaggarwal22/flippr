@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import IP from "./IP";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -28,7 +29,7 @@ const Signup = () => {
 
     try {
       console.log("Making API call..."); // Debug log
-      const res = await axios.post("http://10.250.133.3:5000/api/auth/signup", {
+      const res = await axios.post("http://" + new IP().myIP + "/api/auth/signup", {
         email: username,
         password: password,
       });

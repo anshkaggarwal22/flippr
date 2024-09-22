@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import IP from './IP';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -57,7 +58,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "http://10.250.133.148:5000/api/auth/login",
+        "http://" + new IP().myIP + "/api/auth/login",
         {
           email: username,
           password: password,
@@ -65,6 +66,7 @@ const Login = () => {
       );
 
       if (res.data.token) {
+        console.log(res.data.token);
         navigation.navigate("Home", { token: res.data.token });
       }
     } catch (err) {

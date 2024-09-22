@@ -75,8 +75,8 @@ const InterestsQuestionnaire = ({ route }) => {
   const submitPreferences = async () => {
     try {
       // Make sure this URL is correct and the endpoint exists on your server
-      await axios.post(
-        "http://your-correct-api-url:5000/api/user/preferences",
+      /*await axios.post(
+        "http://10.250.133.3:5000/api/user/preferences",
         {
           token,
           preferences: {
@@ -87,7 +87,7 @@ const InterestsQuestionnaire = ({ route }) => {
             readingPurpose,
           },
         }
-      );
+      );*/
       // If successful, navigate to Home
       navigation.navigate("Home", { token });
     } catch (error) {
