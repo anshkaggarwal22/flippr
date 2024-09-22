@@ -91,7 +91,7 @@ const LikedBooks = ({ route, navigation }) => {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: 'rgba(250, 250, 250, 0.5)', // Add a semi-transparent white overlay
+    backgroundColor: '#E7EAF2',
   },
   scrollView: {
     marginTop: 70
@@ -134,7 +134,7 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background to catch touches
+    backgroundColor: 'rgba(0, 0, 0, 0)', // Semi-transparent background to catch touches
   },
   modalContent: {
     backgroundColor: 'white',

@@ -11,23 +11,27 @@ const Home = ({ route, navigation }) => {
   const { token } = route.params;
 
   const [book, setBook] = useState(null);
+  const [bookArr, setBookArr] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const pan = useRef(new Animated.ValueXY()).current;
 
-  const fetchBook = async (interests = 'the') => {
+  const fetchInitialBooks = async (interests = 'the') => {
     try {
       const res = await axios.get(`https://openlibrary.org/search.json?q=${interests}`);
-      const randomBook = res.data.docs[Math.floor(Math.random() * res.data.docs.length)];
-      const coverURL = `https://covers.openlibrary.org/b/id/${randomBook.cover_i}-L.jpg`;
-  
-      setBook({ ...randomBook, coverURL });
+      setBookArr(res.data.docs)  
     } catch (err) {
       console.error(err);
     }
   };
 
+  const fetchRandomBook = async () => {
+    const randomBook = bookArr[Math.floor(Math.random() * bookArr.length)];
+    const coverURL = `https://covers.openlibrary.org/b/id/${randomBook.cover_i}-L.jpg`;
+    setBook({ ...randomBook, coverURL });
+  }
+
   useEffect(() => {
-    fetchBook(); 
+    fetchInitialBooks(); 
   }, []);
 
   const resetPosition = () => {
@@ -44,15 +48,14 @@ const Home = ({ route, navigation }) => {
         token: token,
         book: book.coverURL,   
       });
-      Alert.alert('Liked!', `${book.coverURL} has been added to your liked books.`);
-      fetchBook(); 
+      fetchRandomBook(); 
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleDislike = () => {
-    fetchBook();
+    fetchRandomBook();
   };
 
   const panResponder = PanResponder.create({
@@ -93,8 +96,11 @@ const Home = ({ route, navigation }) => {
     setShowMenu(false);
   };
 
-  if (!book) return <Loading/>;
-
+  if (!bookArr) return <Loading/>;
+  else if (!book) {
+    fetchRandomBook();
+    return <Loading/>;
+  }
   return (
     <ImageBackground
       source={{ uri: book.coverURL }}
