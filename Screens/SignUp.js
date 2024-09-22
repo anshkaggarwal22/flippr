@@ -37,7 +37,6 @@ const Signup = () => {
       console.log("API response:", JSON.stringify(res.data, null, 2)); // More detailed logging
 
       if (res.data.token) {
-        Alert.alert("Success", "Sign-up successful!");
         navigation.navigate("InterestsQuestionnaire", {
           token: res.data.token,
         });
