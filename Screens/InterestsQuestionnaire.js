@@ -129,7 +129,7 @@ const InterestsQuestionnaire = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Tell us about your reading preferences</Text>
+      <Text style={styles.title}>Preferences</Text>
 
       <Text style={styles.sectionTitle}>Genres (Select multiple)</Text>
       <View style={styles.optionsContainer}>
@@ -189,10 +189,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#E7EAF2",
   },
   title: {
-    fontSize: 24,
+    fontSize: 35,
     fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
+    marginBottom: 5,
+    marginTop: 30,
+    textAlign: "left",
   },
   sectionTitle: {
     fontSize: 18,
