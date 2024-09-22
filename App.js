@@ -40,6 +40,7 @@ export default function App() {
         screenOptions={{
           headerShown: false,
         }}
+        options={{ animationEnabled: false }}
       >
         <Stack.Screen name="LandingPage" component={LandingPage} />
         <Stack.Screen name="Signup" component={Signup} />
@@ -54,6 +55,7 @@ export default function App() {
           name="LikedBooks"
           component={LikedBooks}
           initialParams={{ token: "dev-test-token-123" }}
+          options={{ animationEnabled: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -5,7 +5,7 @@ import Loading from "./Loading"
 import IP from './IP';
 
 const { width, height } = Dimensions.get('window');
-const SWIPE_THRESHOLD = 120; // Distance to trigger like/dislike
+const SWIPE_THRESHOLD = 90; // Distance to trigger like/dislike
 
 const Home = ({ route, navigation }) => {
   const { token } = route.params;
@@ -243,7 +243,7 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background to catch touches
+    backgroundColor: 'rgba(0, 0, 0, 0)', // Semi-transparent background to catch touches
   },
   modalContent: {
     backgroundColor: 'white',
