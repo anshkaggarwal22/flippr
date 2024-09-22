@@ -8,17 +8,11 @@ Technologies Used
 Frontend:
 React Native: A framework for building mobile apps using JavaScript and React.
 Expo: A framework and platform for universal React applications, used for quick mobile app development.
-Axios: A promise-based HTTP client used to communicate with the backend API.
-React Navigation: Used for navigation between app screens.
-Animated API: Used to implement animations in the app, especially for swipe gestures.
 
 Backend:
 Node.js: JavaScript runtime environment used for the backend.
 Express.js: A minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
 MongoDB: A NoSQL database used for storing user data, liked books, and preferences.
-Mongoose: An ODM (Object Data Modeling) library for MongoDB and Node.js.
-JWT (JSON Web Token): Used for secure user authentication and authorization.
-bcrypt: Used for password hashing and securing user data.
 
 AI Integration:
 OpenAI GPT-4: Used to analyze user-liked books and infer their reading preferences for more tailored book recommendations.
