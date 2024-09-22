@@ -9,7 +9,7 @@ const Loading = () => {
         style={styles.gif} 
         resizeMode="contain" 
       />
-      <Text style={styles.text}>flipping the pages of your next great read</Text>
+      <Text style={styles.text}>flipping the pages of {"\n"} your next great read</Text>
     </View>
   );
 };
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     height: 300, // Adjust height as needed
   },
   text: {
-    marginTop: 20, // Space between the GIF and the text
-    fontSize: 16,
+    fontFamily: 'ProximaNova-Bold',
+    fontSize: 22,
     color: '#000',
   },
 });

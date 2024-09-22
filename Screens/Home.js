@@ -48,7 +48,6 @@ const Home = ({ token, navigation }) => {
   };
 
   const handleDislike = () => {
-    Alert.alert('Disliked!', `${book.title} has been skipped.`);
     fetchBook();
   };
 
@@ -90,7 +89,7 @@ const Home = ({ token, navigation }) => {
     setShowMenu(false);
   };
 
-  if (!book) return <Loading />;
+  if (!book) return <Loading/>;
 
   return (
     <ImageBackground
