@@ -15,6 +15,7 @@ const Home = ({ route, navigation }) => {
   const [showMenu, setShowMenu] = useState(false);
   const pan = useRef(new Animated.ValueXY()).current;
 
+  // get initial books from API Source Library
   const fetchInitialBooks = async (interests = 'the') => {
     try {
       const res = await axios.get(`https://openlibrary.org/search.json?q=${interests}`);
@@ -24,6 +25,7 @@ const Home = ({ route, navigation }) => {
     }
   };
 
+  // get book that matches user preference
   const fetchRandomBook = async () => {
     const randomBook = bookArr[Math.floor(Math.random() * bookArr.length)];
     const coverURL = `https://covers.openlibrary.org/b/id/${randomBook.cover_i}-L.jpg`;
@@ -34,6 +36,7 @@ const Home = ({ route, navigation }) => {
     fetchInitialBooks(); 
   }, []);
 
+  // animation
   const resetPosition = () => {
     Animated.spring(pan, {
       toValue: { x: 0, y: 0 },
@@ -41,6 +44,7 @@ const Home = ({ route, navigation }) => {
     }).start();
   };
 
+  // add liked book to database for user
   const handleLike = async () => {
     try {
       console.log(token)
@@ -54,6 +58,7 @@ const Home = ({ route, navigation }) => {
     }
   };
 
+  // get another book if dislike
   const handleDislike = () => {
     fetchRandomBook();
   };
@@ -86,6 +91,7 @@ const Home = ({ route, navigation }) => {
     },
   });
 
+  // logs user out
   const handleLogout = () => {
     navigation.navigate('LandingPage');  
     setShowMenu(false);
@@ -96,11 +102,15 @@ const Home = ({ route, navigation }) => {
     setShowMenu(false);
   };
 
+
+  //loading screen before books returned
   if (!bookArr) return <Loading/>;
   else if (!book) {
     fetchRandomBook();
     return <Loading/>;
   }
+
+  // what user sees on home page
   return (
     <ImageBackground
       source={{ uri: book.coverURL }}
@@ -178,6 +188,8 @@ const Home = ({ route, navigation }) => {
   );
 };
 
+
+// styles on page
 const styles = {
     backgroundImage: {
     flex: 1,

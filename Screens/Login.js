@@ -30,6 +30,7 @@ const Login = () => {
     }
   }, [isError]);
 
+  // shake animation
   const shake = () => {
     Animated.sequence([
       Animated.timing(shakeAnimation, {
@@ -55,6 +56,7 @@ const Login = () => {
     ]).start();
   };
 
+  // check if login is in database
   const handleLogin = async () => {
     try {
       const res = await axios.post(
@@ -75,6 +77,7 @@ const Login = () => {
     }
   };
 
+  // what user sees on login page
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -114,6 +117,7 @@ const Login = () => {
   );
 };
 
+// what styles are on page
 const styles = StyleSheet.create({
   container: {
     flex: 1,

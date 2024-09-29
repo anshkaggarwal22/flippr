@@ -21,6 +21,8 @@ const InterestsQuestionnaire = ({ route }) => {
   const [readingPurpose, setReadingPurpose] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
 
+
+  // components of questionnaire
   const genreOptions = [
     "Healthcare",
     "Finance",
@@ -72,6 +74,7 @@ const InterestsQuestionnaire = ({ route }) => {
     }
   };
 
+  // add preferences
   const submitPreferences = async () => {
     try {
       // Make sure this URL is correct and the endpoint exists on your server
@@ -127,6 +130,7 @@ const InterestsQuestionnaire = ({ route }) => {
     ));
   };
 
+  // what user sees on page
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Preferences</Text>
@@ -182,6 +186,7 @@ const InterestsQuestionnaire = ({ route }) => {
   );
 };
 
+// styles for page
 const styles = StyleSheet.create({
   container: {
     flex: 1,

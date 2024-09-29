@@ -18,6 +18,7 @@ const Signup = () => {
   const navigation = useNavigation();
 
   const handleSignUp = async () => {
+    // error handling with signup
     console.log("handleSignUp function called"); // Debug log
 
     if (!username || !password) {
@@ -27,6 +28,7 @@ const Signup = () => {
 
     console.log("Attempting to sign up with:", username); // Debug log
 
+    // post new user to database
     try {
       console.log("Making API call..."); // Debug log
       const res = await axios.post("http://" + new IP().myIP + "/api/auth/signup", {
@@ -36,6 +38,7 @@ const Signup = () => {
 
       console.log("API response:", JSON.stringify(res.data, null, 2)); // More detailed logging
 
+      // take to questionnaire if successful or return to login in unsuccesful
       if (res.data.token) {
         navigation.navigate("InterestsQuestionnaire", {
           token: res.data.token,
@@ -62,6 +65,7 @@ const Signup = () => {
     }
   };
 
+  // what user sees on signup page
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -99,6 +103,8 @@ const Signup = () => {
   );
 };
 
+
+// styles for signup page
 const styles = StyleSheet.create({
   container: {
     flex: 1,

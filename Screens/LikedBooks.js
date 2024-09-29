@@ -10,6 +10,7 @@ const LikedBooks = ({ route, navigation }) => {
   const [likedBooks, setLikedBooks] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
 
+  // get liked books
   const fetchLikedBooks = async () => {
     try {
       const res = await axios.get('http://' + new IP().myIP + '/api/books/like', {
@@ -36,6 +37,7 @@ const LikedBooks = ({ route, navigation }) => {
     fetchLikedBooks();
   }, []);
 
+  // what user sees on liked books page
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -88,6 +90,7 @@ const LikedBooks = ({ route, navigation }) => {
   );
 };
 
+// styles for liked books page
 const styles = {
   container: {
     flex: 1,

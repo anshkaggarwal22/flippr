@@ -17,6 +17,7 @@ const Stack = createStackNavigator();
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  // add fonts
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
@@ -33,6 +34,7 @@ export default function App() {
     return <View style={styles.container} />;
   }
 
+  // flow of the app of wheh to go to which page
   return (
     <NavigationContainer>
       <StatusBar style="dark" />
@@ -64,6 +66,7 @@ export default function App() {
   );
 }
 
+// styles for page
 const styles = StyleSheet.create({
   container: {
     flex: 1,
