@@ -29,3 +29,4 @@ Swipe to Like/Dislike: Users can swipe to like or skip books.
 View Liked Books: Users can view all their liked books in a separate section.
 Custom Onboarding Questionnaire: Users fill out a reading preferences questionnaire during onboarding to start receiving personalized recommendations.
 More Info on Book Page: Click on the book title to get more info including title, author, and a summary
+# flippr
